@@ -90,7 +90,3 @@
   }
 }
 
-@utility font-serif {
-  font-family: var(--font-serif);
-  font-feature-settings: "liga", "kern";
-}
