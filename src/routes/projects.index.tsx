@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { ContactChips } from "@/components/contact-chips";
 import { ProjectIndex } from "@/components/project-index";
 import { projects } from "@/lib/projects";
@@ -6,13 +7,13 @@ import { projects } from "@/lib/projects";
 export const Route = createFileRoute("/projects/")({
   head: () => ({
     meta: [
-      { title: "Projects — Samriddhi ✲ 2026" },
+      { title: "Work — Samriddhi ✲ 2026" },
       {
         name: "description",
         content:
           "Selected work by Samriddhi — web apps, case studies, AI tools, and product concepts.",
       },
-      { property: "og:title", content: "Projects — Samriddhi ✲ 2026" },
+      { property: "og:title", content: "Work — Samriddhi ✲ 2026" },
       {
         property: "og:description",
         content:
@@ -25,41 +26,63 @@ export const Route = createFileRoute("/projects/")({
 
 function ProjectsPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-background px-6 py-8 sm:px-10 md:px-16">
-      {/* Header */}
-      <header className="flex items-center justify-between font-sans text-xs uppercase tracking-[0.2em] text-ink/70">
-        <Link to="/" className="transition-opacity hover:opacity-60">
-          ← Samriddhi
-        </Link>
-        <span className="hidden sm:inline">Selected work ✲ 2026</span>
-      </header>
+    <main className="relative px-6 pt-28 pb-16 sm:px-10 md:px-16">
+      <div className="mx-auto max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-muted-foreground"
+        >
+          <Link to="/" className="hover:text-[var(--glow)]">
+            ← Intro
+          </Link>
+          <span>Selected work ✲ 2026</span>
+        </motion.div>
 
-      {/* Section label */}
-      <div className="mt-16 flex items-baseline justify-between sm:mt-24">
-        <p className="font-sans text-xs uppercase tracking-[0.25em] text-muted-foreground">
-          Index / {String(projects.length).padStart(2, "0")}
+        <div className="mt-20 flex items-baseline justify-between sm:mt-28">
+          <motion.p
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="text-xs uppercase tracking-[0.28em] text-muted-foreground"
+          >
+            Index / {String(projects.length).padStart(2, "0")}
+          </motion.p>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="hidden font-serif italic text-ink/60 sm:block"
+          >
+            hover to preview
+          </motion.p>
+        </div>
+
+        <motion.h1
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-6 font-display text-[clamp(3.5rem,13vw,12rem)] font-light leading-[0.88] tracking-[-0.03em]"
+        >
+          The <em className="font-serif italic text-[var(--glow)]">work.</em>
+        </motion.h1>
+
+        <p className="mt-6 max-w-2xl text-ink/70 sm:text-lg">
+          Case studies, tools, and small experiments. Hover any row to preview.
         </p>
-        <p className="hidden font-serif italic text-ink/60 sm:block">
-          hover to preview
-        </p>
+
+        <section className="mt-16 sm:mt-20">
+          <ProjectIndex projects={projects} />
+        </section>
+
+        <footer className="mt-32 flex flex-col gap-6 border-t border-white/10 pt-10 sm:flex-row sm:items-end sm:justify-between">
+          <ContactChips />
+          <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+            ✲ More case studies soon
+          </p>
+        </footer>
       </div>
-
-      <h1 className="mt-6 font-serif text-6xl leading-none text-ink sm:text-7xl md:text-8xl">
-        Projects.
-      </h1>
-
-      {/* List */}
-      <section className="mt-12 sm:mt-16">
-        <ProjectIndex projects={projects} />
-      </section>
-
-      {/* Footer */}
-      <footer className="mt-24 flex flex-col gap-6 border-t border-ink/10 pt-6 sm:flex-row sm:items-end sm:justify-between">
-        <ContactChips />
-        <p className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          ✲ More case studies soon
-        </p>
-      </footer>
     </main>
   );
 }
