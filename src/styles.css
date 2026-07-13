@@ -28,46 +28,46 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-paper: var(--paper);
-  --color-paper-2: var(--paper-2);
   --color-ink: var(--ink);
+  --color-glow: var(--glow);
+  --color-glow-2: var(--glow-2);
   --font-serif: "Instrument Serif", "Times New Roman", serif;
-  --font-sans: "Work Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
-  --radius: 0.375rem;
+  --radius: 0.75rem;
 
-  /* Paper & Ink palette */
-  --paper: #f5f3ee;
-  --paper-2: #e8e4dd;
-  --ink: #0d0d0d;
+  /* Obsidian palette */
+  --ink: #f5f4ef;
+  --glow: #b5ff3d;    /* electric lime */
+  --glow-2: #7a5cff;  /* violet */
 
-  --background: #f5f3ee;
-  --foreground: #2d2d2d;
-  --card: #f5f3ee;
-  --card-foreground: #2d2d2d;
-  --popover: #f5f3ee;
-  --popover-foreground: #2d2d2d;
-  --primary: #0d0d0d;
-  --primary-foreground: #f5f3ee;
-  --secondary: #e8e4dd;
-  --secondary-foreground: #2d2d2d;
-  --muted: #e8e4dd;
-  --muted-foreground: #6b6b6b;
-  --accent: #e8e4dd;
-  --accent-foreground: #0d0d0d;
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: #f5f3ee;
-  --border: rgba(13, 13, 13, 0.12);
-  --input: rgba(13, 13, 13, 0.15);
-  --ring: rgba(13, 13, 13, 0.4);
+  --background: #07070a;
+  --foreground: #f5f4ef;
+  --card: #0d0d12;
+  --card-foreground: #f5f4ef;
+  --popover: #0d0d12;
+  --popover-foreground: #f5f4ef;
+  --primary: #b5ff3d;
+  --primary-foreground: #07070a;
+  --secondary: #14141a;
+  --secondary-foreground: #f5f4ef;
+  --muted: #14141a;
+  --muted-foreground: #8a8a95;
+  --accent: #7a5cff;
+  --accent-foreground: #f5f4ef;
+  --destructive: oklch(0.6 0.24 27);
+  --destructive-foreground: #f5f4ef;
+  --border: rgba(245, 244, 239, 0.08);
+  --input: rgba(245, 244, 239, 0.12);
+  --ring: rgba(181, 255, 61, 0.4);
 }
 
 .dark {
-  /* keep the same editorial light theme */
-  --background: #f5f3ee;
-  --foreground: #2d2d2d;
+  --background: #07070a;
+  --foreground: #f5f4ef;
 }
 
 @layer base {
@@ -75,18 +75,74 @@
     border-color: var(--color-border);
   }
 
+  html {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+
   html,
   body {
-    background-color: var(--color-background);
-    color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
+  html.lenis,
+  html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
   ::selection {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--glow);
+    color: var(--background);
+  }
+
+  body {
+    cursor: none;
+  }
+  @media (hover: none), (pointer: coarse) {
+    body { cursor: auto; }
   }
 }
 
+@utility grid-bg {
+  background-image:
+    linear-gradient(to right, rgba(245, 244, 239, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(245, 244, 239, 0.04) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+@utility glass {
+  background: color-mix(in oklab, var(--background) 45%, transparent);
+  backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgba(245, 244, 239, 0.08);
+}
+
+@utility text-glow {
+  text-shadow: 0 0 40px color-mix(in oklab, var(--glow) 45%, transparent);
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(2deg); }
+}
+@utility animate-float {
+  animation: float-slow 8s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+@utility animate-marquee {
+  animation: marquee 40s linear infinite;
+}
