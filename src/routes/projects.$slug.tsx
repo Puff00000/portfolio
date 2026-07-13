@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { motion } from "framer-motion";
 import { ContactChips } from "@/components/contact-chips";
 import { getProject, projects } from "@/lib/projects";
 
@@ -39,78 +40,116 @@ function ProjectDetail() {
   const next = projects[(idx + 1) % projects.length];
 
   return (
-    <main className="flex min-h-screen flex-col bg-background px-6 py-8 sm:px-10 md:px-16">
-      <header className="flex items-center justify-between font-sans text-xs uppercase tracking-[0.2em] text-ink/70">
-        <Link to="/projects" className="transition-opacity hover:opacity-60">
-          ← All projects
-        </Link>
-        <Link to="/" className="hidden transition-opacity hover:opacity-60 sm:inline">
-          Samriddhi
-        </Link>
-      </header>
-
-      <section className="mt-16 max-w-5xl sm:mt-24">
-        <div className="flex items-baseline gap-4 font-sans text-xs uppercase tracking-[0.22em] text-muted-foreground">
-          <span>{project.index}</span>
-          <span>·</span>
-          <span>{project.tag}</span>
-          <span>·</span>
-          <span>{project.year}</span>
-        </div>
-
-        <h1 className="mt-6 font-serif text-6xl leading-[0.95] tracking-tight text-ink sm:text-7xl md:text-8xl">
-          {project.title}.
-        </h1>
-
-        <p className="mt-8 max-w-2xl font-serif text-2xl italic leading-snug text-ink/80 sm:text-3xl">
-          {project.blurb}
-        </p>
-
-        <div className="mt-12 overflow-hidden rounded-sm">
-          <img
-            src={project.image}
-            alt={project.title}
-            width={1200}
-            height={900}
-            className="w-full object-cover"
-          />
-        </div>
-
-        <div className="mt-16 border-t border-ink/15 pt-8">
-          <p className="font-sans text-xs uppercase tracking-[0.22em] text-muted-foreground">
-            ✲ Case study
-          </p>
-          <p className="mt-4 max-w-2xl font-serif text-2xl leading-snug text-ink/70 sm:text-3xl">
-            Full write-up coming soon — problem, process, and outcomes.
-          </p>
-        </div>
-      </section>
-
-      <div className="mt-24 flex items-baseline justify-between border-t border-ink/15 pt-6">
-        <p className="font-sans text-xs uppercase tracking-[0.22em] text-muted-foreground">
-          Next
-        </p>
-        <Link
-          to="/projects/$slug"
-          params={{ slug: next.slug }}
-          className="group inline-flex items-baseline gap-3 font-serif text-2xl text-ink transition-opacity hover:opacity-70 sm:text-4xl"
+    <main className="relative px-6 pt-28 pb-16 sm:px-10 md:px-16">
+      <div className="mx-auto max-w-6xl">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-muted-foreground"
         >
-          {next.title}
-          <span aria-hidden className="transition-transform group-hover:translate-x-1">
-            ↗
-          </span>
-        </Link>
+          <Link to="/projects" className="hover:text-[var(--glow)]">
+            ← All work
+          </Link>
+          <Link to="/" className="hidden hover:text-[var(--glow)] sm:inline">
+            Samriddhi
+          </Link>
+        </motion.div>
+
+        <section className="mt-20 sm:mt-28">
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="flex items-baseline gap-4 text-xs uppercase tracking-[0.24em] text-muted-foreground"
+          >
+            <span className="text-[var(--glow)]">{project.index}</span>
+            <span>·</span>
+            <span>{project.tag}</span>
+            <span>·</span>
+            <span>{project.year}</span>
+          </motion.div>
+
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-6 font-display text-[clamp(3rem,12vw,10rem)] font-light leading-[0.9] tracking-[-0.03em]"
+          >
+            {project.title}
+            <em className="font-serif italic text-[var(--glow)]">.</em>
+          </motion.h1>
+
+          <motion.p
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="mt-8 max-w-2xl font-serif text-2xl italic leading-snug text-ink/85 sm:text-3xl"
+          >
+            {project.blurb}
+          </motion.p>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.9, delay: 0.25 }}
+            className="mt-14 overflow-hidden rounded-2xl ring-1 ring-white/10 shadow-[0_60px_120px_-40px_rgba(0,0,0,0.9)]"
+          >
+            <img
+              src={project.image}
+              alt={project.title}
+              width={1200}
+              height={900}
+              className="w-full object-cover"
+            />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="mt-20 grid gap-10 border-t border-white/10 pt-10 sm:grid-cols-[1fr_2fr]"
+          >
+            <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+              ✲ Case study
+            </p>
+            <p className="max-w-2xl font-serif text-2xl leading-snug text-ink/75 sm:text-3xl">
+              Full write-up coming soon — problem, process, and outcomes.
+            </p>
+          </motion.div>
+        </section>
+
+        <section className="mt-28 flex items-baseline justify-between border-t border-white/10 pt-8">
+          <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
+            Next
+          </p>
+          <Link
+            to="/projects/$slug"
+            params={{ slug: next.slug }}
+            data-cursor="link"
+            className="group inline-flex items-baseline gap-3 font-display text-3xl font-light transition-colors hover:text-[var(--glow)] sm:text-5xl"
+          >
+            {next.title}
+            <span
+              aria-hidden
+              className="text-[var(--glow)] transition-transform group-hover:translate-x-1"
+            >
+              ↗
+            </span>
+          </Link>
+        </section>
+
+        <footer className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-8 sm:flex-row sm:items-end sm:justify-between">
+          <ContactChips />
+          <Link
+            to="/projects"
+            className="text-xs uppercase tracking-[0.24em] text-muted-foreground transition-colors hover:text-[var(--glow)]"
+          >
+            ← Back to index
+          </Link>
+        </footer>
       </div>
-
-      <footer className="mt-16 flex flex-col gap-6 border-t border-ink/10 pt-6 sm:flex-row sm:items-end sm:justify-between">
-        <ContactChips />
-        <Link
-          to="/projects"
-          className="font-sans text-xs uppercase tracking-[0.2em] text-muted-foreground transition-colors hover:text-ink"
-        >
-          ← Back to index
-        </Link>
-      </footer>
     </main>
   );
 }
