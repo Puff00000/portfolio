@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Instagram, Mail, BookOpen, Linkedin } from "lucide-react";
+import { Instagram, BookOpen, Linkedin } from "lucide-react";
 
 const items = [
   { to: "/projects", label: "works" },
