@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Instagram, Mail, BookOpen, Linkedin } from "lucide-react";
+import { Instagram, BookOpen, Linkedin } from "lucide-react";
 
 const items = [
   { to: "/projects", label: "works" },
@@ -10,6 +10,32 @@ const items = [
 ] as const;
 
 const EASE = [0.65, 0, 0.35, 1] as const;
+
+function BehanceIcon({
+  size = 18,
+  strokeWidth = 1.5,
+  className,
+}: {
+  size?: number;
+  strokeWidth?: number;
+  className?: string;
+}) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+    >
+      <path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.211.985 1.98 2.405 1.98 1.188 0 1.969-.512 2.25-1.32l2.169.571zm-5.082-4.14h3.735c-.075-1.107-.785-1.72-1.848-1.72-1.03 0-1.777.613-1.887 1.72zM8.667 18.5H2V5.5h6.667c2.36 0 4.16 1.087 4.16 3.517 0 1.507-.804 2.555-2.047 2.952v.05c1.605.325 2.585 1.43 2.585 3.122 0 2.4-1.827 3.759-4.698 3.759zM5.25 8.75v2.85h1.354c1.127 0 1.75-.447 1.75-1.456 0-.95-.54-1.394-1.57-1.394H5.25zm0 7.05v3.2h1.728c1.218 0 1.93-.554 1.93-1.62 0-1.03-.712-1.58-1.93-1.58H5.25z" />
+    </svg>
+  );
+}
 
 function HoverWord({ text }: { text: string }) {
   const reduce = useReducedMotion();
@@ -191,7 +217,7 @@ export function GlassNav() {
                             lineHeight: 0.92,
                           }}
                         >
-                          <HoverWord text={it.label} />
+                          {it.label}
                         </Link>
                       </motion.div>
                     </motion.li>
@@ -219,31 +245,27 @@ export function GlassNav() {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="absolute right-8 bottom-8 flex items-center gap-[14px]"
             >
-              {[
-                { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-                { Icon: Mail, href: "mailto:samriddhi@example.com", label: "Email" },
-                { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
-                { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              ].map(({ Icon, href, label }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noreferrer"
-                  whileHover={{ scale: 1.08 }}
-                  transition={{ duration: 0.25, ease: EASE }}
-                  className="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-black"
-                >
-                  <motion.span
-                    whileHover={{ rotate: 8 }}
-                    transition={{ duration: 0.25, ease: EASE }}
-                    className="flex items-center justify-center text-white"
-                  >
-                    <Icon size={18} strokeWidth={1.5} />
-                  </motion.span>
-                </motion.a>
-              ))}
+            {[
+              { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+              { Icon: BehanceIcon, href: "https://behance.net", label: "Behance" },
+              { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+              { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
+            ].map(({ Icon, href, label }) => (
+              <motion.a
+                key={label}
+                href={href}
+                aria-label={label}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.08 }}
+                transition={{ duration: 0.25, ease: EASE }}
+                className="group flex h-[48px] w-[48px] items-center justify-center rounded-full bg-white transition-colors duration-300 hover:bg-black"
+              >
+                <span className="flex items-center justify-center text-black transition-colors duration-300 group-hover:text-white">
+                  <Icon size={18} strokeWidth={1.5} />
+                </span>
+              </motion.a>
+            ))}
             </motion.div>
           </motion.div>
         )}
