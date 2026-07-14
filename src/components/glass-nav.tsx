@@ -164,7 +164,9 @@ export function GlassNav() {
                   return (
                     <motion.li
                       key={it.label}
-                      ref={(el) => (itemRefs.current[i] = el)}
+                      ref={(el) => {
+                        itemRefs.current[i] = el;
+                      }}
                       onMouseEnter={() => setActiveIdx(i)}
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
