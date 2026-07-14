@@ -245,31 +245,27 @@ export function GlassNav() {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="absolute right-8 bottom-8 flex items-center gap-[14px]"
             >
-              {[
-                { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-                { Icon: Mail, href: "mailto:samriddhi@example.com", label: "Email" },
-                { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
-                { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              ].map(({ Icon, href, label }) => (
-                <motion.a
-                  key={label}
-                  href={href}
-                  aria-label={label}
-                  target="_blank"
-                  rel="noreferrer"
-                  whileHover={{ scale: 1.08 }}
-                  transition={{ duration: 0.25, ease: EASE }}
-                  className="flex h-[48px] w-[48px] items-center justify-center rounded-full bg-black"
-                >
-                  <motion.span
-                    whileHover={{ rotate: 8 }}
-                    transition={{ duration: 0.25, ease: EASE }}
-                    className="flex items-center justify-center text-white"
-                  >
-                    <Icon size={18} strokeWidth={1.5} />
-                  </motion.span>
-                </motion.a>
-              ))}
+            {[
+              { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
+              { Icon: BehanceIcon, href: "https://behance.net", label: "Behance" },
+              { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
+              { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
+            ].map(({ Icon, href, label }) => (
+              <motion.a
+                key={label}
+                href={href}
+                aria-label={label}
+                target="_blank"
+                rel="noreferrer"
+                whileHover={{ scale: 1.08 }}
+                transition={{ duration: 0.25, ease: EASE }}
+                className="group flex h-[48px] w-[48px] items-center justify-center rounded-full bg-white transition-colors duration-300 hover:bg-black"
+              >
+                <span className="flex items-center justify-center text-black transition-colors duration-300 group-hover:text-white">
+                  <Icon size={18} strokeWidth={1.5} />
+                </span>
+              </motion.a>
+            ))}
             </motion.div>
           </motion.div>
         )}
