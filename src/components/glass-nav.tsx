@@ -71,7 +71,7 @@ function HoverWord({ text }: { text: string }) {
 export function GlassNav() {
   const [open, setOpen] = useState(false);
   const [hovering, setHovering] = useState(false);
-  const [activeIdx, setActiveIdx] = useState<number>(0);
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
   const listRef = useRef<HTMLUListElement | null>(null);
   const [bulletY, setBulletY] = useState(0);
@@ -79,6 +79,10 @@ export function GlassNav() {
   const path = location.pathname;
 
   useEffect(() => setOpen(false), [path]);
+
+  useEffect(() => {
+    if (!open) setActiveIdx(null);
+  }, [open]);
 
   useEffect(() => {
     if (!open) return;
@@ -92,9 +96,9 @@ export function GlassNav() {
     };
   }, [open]);
 
-  // Position bullet next to active item
+  // Position bullet next to hovered item
   useEffect(() => {
-    if (!open) return;
+    if (!open || activeIdx === null) return;
     const el = itemRefs.current[activeIdx];
     const list = listRef.current;
     if (!el || !list) return;
@@ -178,11 +182,14 @@ export function GlassNav() {
             {/* Nav list */}
             <nav className="absolute left-8 sm:left-12 right-8 top-[38%] -translate-y-1/2">
               <ul ref={listRef} className="relative flex flex-col gap-[18px]">
-                {/* Bullet indicator */}
+                {/* Bullet indicator — appears only next to the hovered item */}
                 <motion.span
                   aria-hidden
-                  className="absolute left-0 h-[10px] w-[10px] rounded-full bg-black"
-                  animate={{ top: bulletY - 5, opacity: 1 }}
+                  className="absolute left-0 h-14 w-14 rounded-full bg-black"
+                  animate={{
+                    top: bulletY - 28,
+                    opacity: activeIdx === null ? 0 : 1,
+                  }}
                   transition={{ type: "spring", stiffness: 260, damping: 26 }}
                 />
                 {items.map((it, i) => {
@@ -194,6 +201,9 @@ export function GlassNav() {
                         itemRefs.current[i] = el;
                       }}
                       onMouseEnter={() => setActiveIdx(i)}
+                      onMouseLeave={() =>
+                        setActiveIdx((cur) => (cur === i ? null : cur))
+                      }
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, y: 10 }}
@@ -205,7 +215,7 @@ export function GlassNav() {
                       className="leading-[0.92]"
                     >
                       <motion.div
-                        animate={{ x: active ? 34 : 0 }}
+                        animate={{ x: active ? 76 : 0 }}
                         transition={{ type: "spring", stiffness: 260, damping: 26 }}
                       >
                         <Link
