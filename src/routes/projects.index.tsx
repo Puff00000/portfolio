@@ -1,6 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ContactChips } from "@/components/contact-chips";
 import { ProjectIndex } from "@/components/project-index";
 import { projects } from "@/lib/projects";
 
@@ -75,13 +74,6 @@ function ProjectsPage() {
         <section className="mt-16 sm:mt-20">
           <ProjectIndex projects={projects} />
         </section>
-
-        <footer className="mt-32 flex flex-col gap-6 border-t border-white/10 pt-10 sm:flex-row sm:items-end sm:justify-between">
-          <ContactChips />
-          <p className="text-xs uppercase tracking-[0.24em] text-muted-foreground">
-            ✲ More case studies soon
-          </p>
-        </footer>
       </div>
     </main>
   );
