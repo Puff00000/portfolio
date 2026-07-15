@@ -212,13 +212,6 @@ function Index() {
           </div>
         </div>
       </section>
-
-      <footer className="relative border-t border-white/10 px-6 py-8 sm:px-10 md:px-16">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 text-xs uppercase tracking-[0.22em] text-muted-foreground">
-          <span>© 2026 Samriddhi</span>
-          <span>Built with curiosity ✲ WebGL</span>
-        </div>
-      </footer>
     </main>
   );
 }
