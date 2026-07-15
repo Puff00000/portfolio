@@ -12,7 +12,6 @@ import type { ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { WebGLBackground } from "@/components/webgl-background";
 import { SmoothScroll } from "@/components/smooth-scroll";
-import { CustomCursor } from "@/components/custom-cursor";
 import { GlassNav } from "@/components/glass-nav";
 
 function NotFoundComponent() {
@@ -152,7 +151,6 @@ function RootComponent() {
         />
         <WebGLBackground />
         <SmoothScroll />
-        <CustomCursor />
         <GlassNav />
         <Outlet />
       </div>
