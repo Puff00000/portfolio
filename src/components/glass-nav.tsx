@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Instagram, Medium, Linkedin } from "lucide-react";
+import { Instagram, BookOpen, Linkedin } from "lucide-react";
 
 const items = [
   { to: "/projects", label: "works" },
@@ -122,7 +122,7 @@ export function GlassNav() {
           className="flex select-none items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[13px] font-medium lowercase tracking-tight text-black"
         >
           <HoverWord text="menu" />
-          <svg width="12" height="14" viewBox="0 0 12 12" fill="none">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
             <path
               d="M2.5 4.5L6 8l3.5-3.5"
               stroke="currentColor"
@@ -182,12 +182,16 @@ export function GlassNav() {
             {/* Nav list */}
             <nav className="absolute left-8 sm:left-12 right-8 top-[38%] -translate-y-1/2">
               <ul ref={listRef} className="relative flex flex-col gap-[18px]">
-                {/* Bullet indicator — appears only next to the hovered item */}
+                {/* Bullet indicator — appears only next to the hovered item.
+                    Sized smaller than the "w" glyph height and vertically
+                    centered via translateY(-50%), so its top/bottom edges
+                    sit inside the letter's top/bottom, not past them. */}
                 <motion.span
                   aria-hidden
-                  className="absolute left-0 h-12 w-12 rounded-full bg-black"
+                  className="absolute left-0 -translate-y-1/2 rounded-full bg-black"
+                  style={{ height: "clamp(24px, 4vw, 40px)", width: "clamp(24px, 4vw, 40px)" }}
                   animate={{
-                    top: bulletY - 28,
+                    top: bulletY,
                     opacity: activeIdx === null ? 0 : 1,
                   }}
                   transition={{ type: "spring", stiffness: 260, damping: 26 }}
@@ -215,7 +219,7 @@ export function GlassNav() {
                       className="leading-[0.92]"
                     >
                       <motion.div
-                        animate={{ x: active ? 76 : 0 }}
+                        animate={{ x: active ? 52 : 0 }}
                         transition={{ type: "spring", stiffness: 260, damping: 26 }}
                       >
                         <Link
@@ -244,7 +248,7 @@ export function GlassNav() {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="absolute left-8 sm:left-12 bottom-10 text-[16px] font-normal text-[#111111]"
             >
-              <a href="mailto:samriddhi@example.com">samriddhi.pn@gmail.com</a>
+              <a href="mailto:samriddhi@example.com">samriddhi@example.com</a>
             </motion.div>
 
             {/* Social icons bottom-right */}
@@ -259,7 +263,7 @@ export function GlassNav() {
               { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
               { Icon: BehanceIcon, href: "https://behance.net", label: "Behance" },
               { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              { Icon: Medium, href: "https://medium.com", label: "Medium" },
+              { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
             ].map(({ Icon, href, label }) => (
               <motion.a
                 key={label}
