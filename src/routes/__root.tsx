@@ -84,14 +84,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { name: "theme-color", content: "#07070a" },
-      { title: "Samriddhi — Portfolio ✲ 2026" },
+      { title: "Samriddhi — Portfolio" },
       {
         name: "description",
         content:
           "Interactive portfolio of Samriddhi — product thinking, UX, data, case studies and small web experiments.",
       },
       { name: "author", content: "Samriddhi" },
-      { property: "og:title", content: "Samriddhi — Portfolio ✲ 2026" },
+      { property: "og:title", content: "Samriddhi — Portfolio" },
       {
         property: "og:description",
         content:
