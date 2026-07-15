@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Instagram, BookOpen, Linkedin } from "lucide-react";
+import { Instagram, Medium, Linkedin } from "lucide-react";
 
 const items = [
   { to: "/projects", label: "works" },
@@ -122,7 +122,7 @@ export function GlassNav() {
           className="flex select-none items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[13px] font-medium lowercase tracking-tight text-black"
         >
           <HoverWord text="menu" />
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <svg width="12" height="14" viewBox="0 0 12 12" fill="none">
             <path
               d="M2.5 4.5L6 8l3.5-3.5"
               stroke="currentColor"
@@ -185,7 +185,7 @@ export function GlassNav() {
                 {/* Bullet indicator — appears only next to the hovered item */}
                 <motion.span
                   aria-hidden
-                  className="absolute left-0 h-14 w-14 rounded-full bg-black"
+                  className="absolute left-0 h-12 w-12 rounded-full bg-black"
                   animate={{
                     top: bulletY - 28,
                     opacity: activeIdx === null ? 0 : 1,
@@ -244,7 +244,7 @@ export function GlassNav() {
               transition={{ delay: 0.4, duration: 0.4 }}
               className="absolute left-8 sm:left-12 bottom-10 text-[16px] font-normal text-[#111111]"
             >
-              <a href="mailto:samriddhi@example.com">samriddhi@example.com</a>
+              <a href="mailto:samriddhi@example.com">samriddhi.pn@gmail.com</a>
             </motion.div>
 
             {/* Social icons bottom-right */}
@@ -259,7 +259,7 @@ export function GlassNav() {
               { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
               { Icon: BehanceIcon, href: "https://behance.net", label: "Behance" },
               { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
+              { Icon: Medium, href: "https://medium.com", label: "Medium" },
             ].map(({ Icon, href, label }) => (
               <motion.a
                 key={label}
