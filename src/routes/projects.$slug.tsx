@@ -1,6 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ContactChips } from "@/components/contact-chips";
 import { getProject, projects } from "@/lib/projects";
 
 export const Route = createFileRoute("/projects/$slug")({
@@ -139,16 +138,6 @@ function ProjectDetail() {
             </span>
           </Link>
         </section>
-
-        <footer className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-8 sm:flex-row sm:items-end sm:justify-between">
-          <ContactChips />
-          <Link
-            to="/projects"
-            className="text-xs uppercase tracking-[0.24em] text-muted-foreground transition-colors hover:text-[var(--glow)]"
-          >
-            ← Back to index
-          </Link>
-        </footer>
       </div>
     </main>
   );
