@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Instagram, BookOpen, Linkedin } from "lucide-react";
+import { Instagram, Medium, Linkedin } from "lucide-react";
 
 const items = [
   { to: "/projects", label: "works" },
@@ -263,7 +263,7 @@ export function GlassNav() {
               { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
               { Icon: BehanceIcon, href: "https://behance.net", label: "Behance" },
               { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              { Icon: BookOpen, href: "https://medium.com", label: "Medium" },
+              { Icon: Medium, href: "https://medium.com", label: "Medium" },
             ].map(({ Icon, href, label }) => (
               <motion.a
                 key={label}
