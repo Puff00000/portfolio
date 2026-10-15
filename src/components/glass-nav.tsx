@@ -5,7 +5,7 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 /* ── Your links. LinkedIn stays hidden until you paste its URL. ── */
 const EMAIL = "samriddhi.pn05@gmail.com";
 const GITHUB = "https://github.com/Puff00000";
-const LINKEDIN = "https://www.linkedin.com/in/samriddhi-pradhan-664480215/"
+const LINKEDIN = "https://www.linkedin.com/in/samriddhi-pradhan-664480215"; 
 /* ─────────────────────────────────────────────────────────────── */
 
 const SOCIALS = [
@@ -83,14 +83,14 @@ export function GlassNav() {
   const easeInOut = [0.65, 0, 0.35, 1] as const;
 
   const linkClass =
-    "group relative inline-block py-0.5 text-[clamp(1.9rem,3.6vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] outline-none " +
+    "group relative inline-block py-0.5 text-[clamp(2.5rem,5.2vw,4.75rem)] font-light leading-[1.02] tracking-[-0.03em] outline-none " +
     "focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-8 focus-visible:outline-black/60";
 
   const label = (text: string) => (
     <>
       <span
         aria-hidden
-        className="absolute -left-5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+        className="absolute -left-5 top-1/2 h-2.5 w-2.5 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
         style={{ background: INK }}
       />
       <span className="inline-block transition-transform duration-300 group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5">
@@ -125,15 +125,15 @@ export function GlassNav() {
       <AnimatePresence onExitComplete={() => triggerRef.current?.focus()}>
         {open && (
           <>
-            {/* invisible backdrop: click outside to close */}
+            {/* dimmed + blurred page behind the card; click to close */}
             <motion.div
               key="menu-backdrop"
               aria-hidden
-              className="fixed inset-0 z-[45]"
+              className="fixed inset-0 z-[45] bg-black/45 backdrop-blur-md"
               onClick={close}
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
+              animate={{ opacity: 1, transition: { duration: 0.5 } }}
+              exit={{ opacity: 0, transition: { duration: 0.4 } }}
             />
             <motion.div
               key="menu-panel"
@@ -142,15 +142,15 @@ export function GlassNav() {
               role="dialog"
               aria-modal="true"
               aria-label="Menu"
-              className="fixed right-3 top-3 z-50 flex h-[min(72vh,460px)] w-[calc(100vw-1.5rem)] flex-col justify-between overflow-y-auto rounded-xl p-5 sm:right-4 sm:top-4 sm:h-[50vh] sm:min-h-[400px] sm:w-[50vw] sm:min-w-[420px] sm:p-7"
+              className="fixed bottom-3 right-3 top-3 z-50 flex w-[calc(100vw-1.5rem)] flex-col justify-between overflow-y-auto rounded-xl p-5 sm:bottom-10 sm:right-10 sm:top-10 sm:w-[clamp(380px,32vw,640px)] sm:p-8"
               style={{
                 transformOrigin: "100% 0%",
                 color: INK,
                 background:
-                  "radial-gradient(70% 60% at 92% 96%, rgba(170,226,214,0.6), rgba(170,226,214,0) 70%), " +
+                  "radial-gradient(70% 55% at 92% 96%, rgba(170,226,214,0.6), rgba(170,226,214,0) 70%), " +
                   PAPER,
               }}
-              initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.82, x: 36, y: -36 }}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.86, x: 40, y: -40 }}
               animate={
                 reduce
                   ? { opacity: 1, transition: { duration: 0.2 } }
@@ -159,7 +159,7 @@ export function GlassNav() {
               exit={
                 reduce
                   ? { opacity: 0, transition: { duration: 0.15 } }
-                  : { opacity: 0, scale: 0.88, x: 24, y: -24, transition: { duration: 0.5, ease: easeInOut } }
+                  : { opacity: 0, scale: 0.9, x: 28, y: -28, transition: { duration: 0.5, ease: easeInOut } }
               }
             >
               <div className="flex justify-end">
@@ -174,8 +174,8 @@ export function GlassNav() {
                 </button>
               </div>
 
-              <nav aria-label="Main" className="my-4 pl-5">
-                <ul className="flex flex-col gap-1">
+              <nav aria-label="Main" className="my-6 pl-5">
+                <ul className="flex flex-col gap-1 sm:gap-2">
                   <li>
                     <Link to="/projects" onClick={close} className={linkClass} data-cursor="link">
                       {label("works")}
@@ -208,7 +208,7 @@ export function GlassNav() {
                         href={s.href}
                         {...(s.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                         aria-label={s.label}
-                        className="flex h-9 w-9 items-center justify-center rounded-full outline-none transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-black/60"
+                        className="flex h-10 w-10 items-center justify-center rounded-full outline-none transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-black/60"
                         style={{ background: INK, color: PAPER }}
                       >
                         <Icon name={s.icon} />
