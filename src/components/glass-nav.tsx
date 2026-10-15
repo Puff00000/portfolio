@@ -1,290 +1,228 @@
-import { useState, useEffect, useRef } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
-import { Instagram, Linkedin } from "lucide-react";
-import { MediumIcon } from "@/components/medium-icon";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
-const items = [
-  { to: "/projects", label: "works" },
-  { to: "/about", label: "about" },
-  { to: "/about", label: "contact" },
+/* ── Your links. LinkedIn stays hidden until you paste its URL. ── */
+const EMAIL = "samriddhi.pn05@gmail.com";
+const GITHUB = "https://github.com/Puff00000";
+const LINKEDIN = "https://www.linkedin.com/in/samriddhi-pradhan-664480215/"
+/* ─────────────────────────────────────────────────────────────── */
+
+const SOCIALS = [
+  { label: "GitHub", href: GITHUB, icon: "github", external: true },
+  { label: "LinkedIn", href: LINKEDIN, icon: "linkedin", external: true },
+  { label: "Email (Gmail)", href: `mailto:${EMAIL}`, icon: "gmail", external: false },
 ] as const;
 
-const EASE = [0.65, 0, 0.35, 1] as const;
+const INK = "#141414";
+const PAPER = "#F7F7F2";
 
-function BehanceIcon({
-  size = 18,
-  strokeWidth = 1.5,
-  className,
-}: {
-  size?: number;
-  strokeWidth?: number;
-  className?: string;
-}) {
+function Icon({ name }: { name: string }) {
+  const p = { viewBox: "0 0 24 24", width: 16, height: 16, "aria-hidden": true } as const;
+  if (name === "linkedin")
+    return (
+      <svg {...p} fill="currentColor">
+        <path d="M6.94 8.5H3.56V20h3.38V8.5zM5.25 3a1.96 1.96 0 100 3.92A1.96 1.96 0 005.25 3zM20.44 13.2c0-3.1-1.65-4.55-3.86-4.55-1.78 0-2.58.98-3.02 1.67V8.5h-3.38V20h3.38v-6.4c0-.34.02-.68.13-.92.27-.68.9-1.39 1.95-1.39 1.38 0 1.93 1.05 1.93 2.6V20h3.38v-6.8z" />
+      </svg>
+    );
+  if (name === "gmail")
+    return (
+      <svg {...p} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" strokeLinecap="round">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3.5 6.5L12 13l8.5-6.5" />
+      </svg>
+    );
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth={strokeWidth}
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M22 7h-7V5h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14H15.97c.13 1.211.985 1.98 2.405 1.98 1.188 0 1.969-.512 2.25-1.32l2.169.571zm-5.082-4.14h3.735c-.075-1.107-.785-1.72-1.848-1.72-1.03 0-1.777.613-1.887 1.72zM8.667 18.5H2V5.5h6.667c2.36 0 4.16 1.087 4.16 3.517 0 1.507-.804 2.555-2.047 2.952v.05c1.605.325 2.585 1.43 2.585 3.122 0 2.4-1.827 3.759-4.698 3.759zM5.25 8.75v2.85h1.354c1.127 0 1.75-.447 1.75-1.456 0-.95-.54-1.394-1.57-1.394H5.25zm0 7.05v3.2h1.728c1.218 0 1.93-.554 1.93-1.62 0-1.03-.712-1.58-1.93-1.58H5.25z" />
+    <svg {...p} fill="currentColor">
+      <path d="M12 .5a11.5 11.5 0 00-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.23-1.28-5.23-5.68 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 015.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0012 .5z" />
     </svg>
-  );
-}
-
-function HoverWord({ text }: { text: string }) {
-  const reduce = useReducedMotion();
-  return (
-    <motion.span
-      initial="rest"
-      whileHover="hover"
-      animate="rest"
-      className="inline-flex"
-      variants={{ rest: {}, hover: { transition: { staggerChildren: 0.02 } } }}
-    >
-      {text.split("").map((ch, i) => {
-        const rot = ((i * 53) % 11) - 5;
-        return (
-          <motion.span
-            key={i}
-            className="inline-block will-change-transform"
-            variants={
-              reduce
-                ? { rest: {}, hover: {} }
-                : { rest: { y: 0, rotate: 0 }, hover: { y: -8, rotate: rot } }
-            }
-            transition={{ type: "spring", stiffness: 380, damping: 14 }}
-          >
-            {ch === " " ? "\u00A0" : ch}
-          </motion.span>
-        );
-      })}
-    </motion.span>
   );
 }
 
 export function GlassNav() {
   const [open, setOpen] = useState(false);
-  const [hovering, setHovering] = useState(false);
-  const [activeIdx, setActiveIdx] = useState<number | null>(null);
-  const itemRefs = useRef<(HTMLLIElement | null)[]>([]);
-  const listRef = useRef<HTMLUListElement | null>(null);
-  const [bulletY, setBulletY] = useState(0);
-  const { location } = useRouterState();
-  const path = location.pathname;
-
-  useEffect(() => setOpen(false), [path]);
-
-  useEffect(() => {
-    if (!open) setActiveIdx(null);
-  }, [open]);
+  const reduce = useReducedMotion();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => setOpen(false), []);
 
   useEffect(() => {
     if (!open) return;
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
-    window.addEventListener("keydown", onKey);
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        setOpen(false);
+        return;
+      }
+      if (e.key === "Tab" && panelRef.current) {
+        const f = panelRef.current.querySelectorAll<HTMLElement>("a[href],button:not([disabled])");
+        if (!f.length) return;
+        const first = f[0];
+        const last = f[f.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    const t = window.setTimeout(() => closeRef.current?.focus(), 60);
+
     return () => {
-      document.body.style.overflow = prev;
-      window.removeEventListener("keydown", onKey);
+      document.removeEventListener("keydown", onKey);
+      window.clearTimeout(t);
     };
   }, [open]);
 
-  // Position bullet next to hovered item
-  useEffect(() => {
-    if (!open || activeIdx === null) return;
-    const el = itemRefs.current[activeIdx];
-    const list = listRef.current;
-    if (!el || !list) return;
-    const elRect = el.getBoundingClientRect();
-    const listRect = list.getBoundingClientRect();
-    setBulletY(elRect.top - listRect.top + elRect.height / 2);
-  }, [activeIdx, open]);
+  const ease = [0.22, 1, 0.36, 1] as const;
+  const easeInOut = [0.65, 0, 0.35, 1] as const;
+
+  const linkClass =
+    "group relative inline-block py-0.5 text-[clamp(1.9rem,3.6vw,3rem)] font-light leading-[1.05] tracking-[-0.02em] outline-none " +
+    "focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-8 focus-visible:outline-black/60";
+
+  const label = (text: string) => (
+    <>
+      <span
+        aria-hidden
+        className="absolute -left-5 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+        style={{ background: INK }}
+      />
+      <span className="inline-block transition-transform duration-300 group-hover:translate-x-1.5 group-focus-visible:translate-x-1.5">
+        {text}
+      </span>
+    </>
+  );
 
   return (
-    <div className="pointer-events-none fixed inset-0 z-50">
-      {/* Menu button */}
-      <div className="pointer-events-auto absolute right-4 top-4 sm:right-6 sm:top-6">
-        <motion.button
-          type="button"
-          aria-label="Open menu"
-          onClick={() => setOpen(true)}
-          onHoverStart={() => setHovering(true)}
-          onHoverEnd={() => setHovering(false)}
-          animate={{ scale: hovering ? 1.05 : 1, opacity: open ? 0 : 1 }}
-          transition={{ duration: 0.3, ease: EASE }}
-          className="flex select-none items-center gap-2 rounded-full bg-white px-5 py-2.5 text-[13px] font-medium lowercase tracking-tight text-black"
+    <>
+      <button
+        ref={triggerRef}
+        type="button"
+        data-cursor="link"
+        aria-expanded={open}
+        aria-controls="site-menu"
+        onClick={() => setOpen((o) => !o)}
+        className="group fixed right-5 top-5 z-40 inline-flex items-center gap-2 rounded-full bg-white px-4 py-2 text-sm text-black transition-opacity hover:opacity-85 sm:right-8 sm:top-7"
+      >
+        menu
+        <svg
+          viewBox="0 0 12 12"
+          width="11"
+          height="11"
+          aria-hidden
+          className="transition-transform duration-300 group-hover:rotate-90"
         >
-          <HoverWord text="menu" />
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
-            <path
-              d="M2.5 4.5L6 8l3.5-3.5"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </motion.button>
-      </div>
+          <path d="M6 1v10M1 6h10" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+        </svg>
+      </button>
 
-      {/* Right-side floating white panel */}
-      <AnimatePresence>
+      <AnimatePresence onExitComplete={() => triggerRef.current?.focus()}>
         {open && (
-          <motion.div
-            key="panel"
-            className="pointer-events-auto absolute right-4 top-4 bottom-4 sm:right-6 sm:top-6 sm:bottom-6 rounded-[32px] bg-white text-[#111111] overflow-hidden"
-            style={{ width: "min(calc(100vw - 2rem), 560px)" }}
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.6, ease: EASE }}
-          >
-            {/* Close top-right */}
-            <div className="absolute right-8 top-8 flex items-center gap-3">
-              <button
-                onClick={() => setOpen(false)}
-                className="text-[18px] font-normal lowercase text-[#111111]"
-              >
-                close
-              </button>
-              <motion.button
-                onClick={() => setOpen(false)}
-                aria-label="Close menu"
-                whileHover={{ scale: 1.05 }}
-                transition={{ duration: 0.25, ease: EASE }}
-                className="flex h-[52px] w-[52px] items-center justify-center rounded-full bg-black"
-              >
-                <motion.svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 14 14"
-                  fill="none"
-                  whileHover={{ rotate: 90, opacity: 0.85 }}
-                  transition={{ duration: 0.25, ease: EASE }}
+          <>
+            {/* invisible backdrop: click outside to close */}
+            <motion.div
+              key="menu-backdrop"
+              aria-hidden
+              className="fixed inset-0 z-[45]"
+              onClick={close}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            />
+            <motion.div
+              key="menu-panel"
+              id="site-menu"
+              ref={panelRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu"
+              className="fixed right-3 top-3 z-50 flex h-[min(72vh,460px)] w-[calc(100vw-1.5rem)] flex-col justify-between overflow-y-auto rounded-xl p-5 sm:right-4 sm:top-4 sm:h-[50vh] sm:min-h-[400px] sm:w-[50vw] sm:min-w-[420px] sm:p-7"
+              style={{
+                transformOrigin: "100% 0%",
+                color: INK,
+                background:
+                  "radial-gradient(70% 60% at 92% 96%, rgba(170,226,214,0.6), rgba(170,226,214,0) 70%), " +
+                  PAPER,
+              }}
+              initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.82, x: 36, y: -36 }}
+              animate={
+                reduce
+                  ? { opacity: 1, transition: { duration: 0.2 } }
+                  : { opacity: 1, scale: 1, x: 0, y: 0, transition: { duration: 0.75, ease } }
+              }
+              exit={
+                reduce
+                  ? { opacity: 0, transition: { duration: 0.15 } }
+                  : { opacity: 0, scale: 0.88, x: 24, y: -24, transition: { duration: 0.5, ease: easeInOut } }
+              }
+            >
+              <div className="flex justify-end">
+                <button
+                  ref={closeRef}
+                  type="button"
+                  data-cursor="link"
+                  onClick={close}
+                  className="rounded-full border border-black/15 px-4 py-2 text-sm outline-none transition-colors hover:bg-black/5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-4 focus-visible:outline-black/60"
                 >
-                  <path
-                    d="M2 2l10 10M12 2L2 12"
-                    stroke="white"
-                    strokeWidth="1.25"
-                    strokeLinecap="round"
-                  />
-                </motion.svg>
-              </motion.button>
-            </div>
+                  close ×
+                </button>
+              </div>
 
-            {/* Nav list */}
-            <nav className="absolute left-8 sm:left-12 right-8 top-[38%] -translate-y-1/2">
-              <ul ref={listRef} className="relative flex flex-col gap-[18px]">
-                {/* Bullet indicator — appears only next to the hovered item.
-                    Sized smaller than the "w" glyph height and vertically
-                    centered via translateY(-50%), so its top/bottom edges
-                    sit inside the letter's top/bottom, not past them. */}
-                <motion.span
-                  aria-hidden
-                  className="absolute left-0 -translate-y-1/2 rounded-full bg-black"
-                  style={{ height: "clamp(24px, 4vw, 40px)", width: "clamp(24px, 4vw, 40px)" }}
-                  animate={{
-                    top: bulletY,
-                    opacity: activeIdx === null ? 0 : 1,
-                  }}
-                  transition={{ type: "spring", stiffness: 260, damping: 26 }}
-                />
-                {items.map((it, i) => {
-                  const active = i === activeIdx;
-                  return (
-                    <motion.li
-                      key={it.label}
-                      ref={(el) => {
-                        itemRefs.current[i] = el;
-                      }}
-                      onMouseEnter={() => setActiveIdx(i)}
-                      onMouseLeave={() =>
-                        setActiveIdx((cur) => (cur === i ? null : cur))
-                      }
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, y: 10 }}
-                      transition={{
-                        delay: 0.25 + i * 0.06,
-                        duration: 0.5,
-                        ease: EASE,
-                      }}
-                      className="leading-[0.92]"
-                    >
-                      <motion.div
-                        animate={{ x: active ? 52 : 0 }}
-                        transition={{ type: "spring", stiffness: 260, damping: 26 }}
+              <nav aria-label="Main" className="my-4 pl-5">
+                <ul className="flex flex-col gap-1">
+                  <li>
+                    <Link to="/projects" onClick={close} className={linkClass} data-cursor="link">
+                      {label("works")}
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/about" onClick={close} className={linkClass} data-cursor="link">
+                      {label("about")}
+                    </Link>
+                  </li>
+                  <li>
+                    <a href={`mailto:${EMAIL}`} onClick={close} className={linkClass} data-cursor="link">
+                      {label("contact")}
+                    </a>
+                  </li>
+                </ul>
+              </nav>
+
+              <div className="flex flex-wrap items-end justify-between gap-4 text-xs">
+                <a
+                  href={`mailto:${EMAIL}`}
+                  className="opacity-70 transition-opacity hover:opacity-100"
+                >
+                  {EMAIL}
+                </a>
+                <ul className="flex items-center gap-2">
+                  {SOCIALS.filter((s) => s.href).map((s) => (
+                    <li key={s.label}>
+                      <a
+                        href={s.href}
+                        {...(s.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                        aria-label={s.label}
+                        className="flex h-9 w-9 items-center justify-center rounded-full outline-none transition-transform hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-1 focus-visible:outline-offset-2 focus-visible:outline-black/60"
+                        style={{ background: INK, color: PAPER }}
                       >
-                        <Link
-                          to={it.to}
-                          className="inline-block font-sans font-semibold lowercase text-[#111111]"
-                          style={{
-                            fontSize: "clamp(56px, 9vw, 96px)",
-                            letterSpacing: "-0.03em",
-                            lineHeight: 0.92,
-                          }}
-                        >
-                          {it.label}
-                        </Link>
-                      </motion.div>
-                    </motion.li>
-                  );
-                })}
-              </ul>
-            </nav>
-
-            {/* Email bottom-left */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-              className="absolute left-8 sm:left-12 bottom-10 text-[16px] font-normal text-[#111111]"
-            >
-              <a href="mailto:samriddhi@example.com">samriddhi@example.com</a>
+                        <Icon name={s.icon} />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </motion.div>
-
-            {/* Social icons bottom-right */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ delay: 0.4, duration: 0.4 }}
-              className="absolute right-8 bottom-8 flex items-center gap-[14px]"
-            >
-            {[
-              { Icon: Instagram, href: "https://instagram.com", label: "Instagram" },
-              { Icon: BehanceIcon, href: "https://behance.net", label: "Behance" },
-              { Icon: Linkedin, href: "https://linkedin.com", label: "LinkedIn" },
-              { Icon: Medium, href: "https://medium.com", label: "Medium" },
-            ].map(({ Icon, href, label }) => (
-              <motion.a
-                key={label}
-                href={href}
-                aria-label={label}
-                target="_blank"
-                rel="noreferrer"
-                whileHover={{ scale: 1.08 }}
-                transition={{ duration: 0.25, ease: EASE }}
-                className="group flex h-[48px] w-[48px] items-center justify-center rounded-full bg-white transition-colors duration-300 hover:bg-black"
-              >
-                <span className="flex items-center justify-center text-black transition-colors duration-300 group-hover:text-white">
-                  <Icon size={18} strokeWidth={1.5} />
-                </span>
-              </motion.a>
-            ))}
-            </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
+
+export default GlassNav;
