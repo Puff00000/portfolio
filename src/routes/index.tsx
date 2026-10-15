@@ -1,10 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { PixelReveal } from "@/components/pixel-reveal";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Samriddhi — Portfolio ✲ 2026" },
+      { title: "Samriddhi — Portfolio" },
       {
         name: "description",
         content:
@@ -48,28 +48,6 @@ function Index() {
                 always question the obvious answer first.
               </em>
             </p>
-
-            <div className="mt-14 flex flex-wrap items-center gap-4">
-              <Link
-                to="/projects"
-                data-cursor="link"
-                className="group inline-flex items-center gap-3 rounded-full bg-[var(--glow)] px-6 py-3 text-sm font-medium uppercase tracking-[0.2em] text-background transition-transform hover:-translate-y-0.5"
-              >
-
-                <span
-                  aria-hidden
-                  className="transition-transform group-hover:translate-x-1"
-                >
-                  ↗
-                </span>
-              </Link>
-              <Link
-                to="/about"
-                className="rounded-full border border-white/15 px-6 py-3 text-sm uppercase tracking-[0.2em] text-ink/80 transition-colors hover:border-white/40 hover:text-ink"
-              >
-                
-              </Link>
-            </div>
           </PixelReveal>
         </div>
       </section>
