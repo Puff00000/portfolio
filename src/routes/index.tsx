@@ -29,7 +29,7 @@ function Index() {
           <PixelReveal>
             <div className="flex items-center gap-3 text-xs uppercase tracking-[0.28em] text-muted-foreground">
               <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--glow)] shadow-[0_0_14px_var(--glow)]" />
-              Portfolio ✲ 2026 · Live
+              Portfolio
             </div>
 
             <h1 className="mt-10 font-display font-light leading-[0.86] tracking-[-0.035em] text-[clamp(3.5rem,14vw,14rem)]">
@@ -55,7 +55,7 @@ function Index() {
                 data-cursor="link"
                 className="group inline-flex items-center gap-3 rounded-full bg-[var(--glow)] px-6 py-3 text-sm font-medium uppercase tracking-[0.2em] text-background transition-transform hover:-translate-y-0.5"
               >
-                Enter the work
+
                 <span
                   aria-hidden
                   className="transition-transform group-hover:translate-x-1"
@@ -67,7 +67,7 @@ function Index() {
                 to="/about"
                 className="rounded-full border border-white/15 px-6 py-3 text-sm uppercase tracking-[0.2em] text-ink/80 transition-colors hover:border-white/40 hover:text-ink"
               >
-                About me
+                
               </Link>
             </div>
           </PixelReveal>
