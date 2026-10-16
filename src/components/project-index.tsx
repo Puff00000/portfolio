@@ -1,143 +1,114 @@
 import { Link } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { motion, useMotionValue, useSpring, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import type { Project } from "@/lib/projects";
 
 type Props = { projects: Project[] };
 
+// Block colours, built from the portfolio theme:
+// lime glow, cream (menu card), mint (menu card gradient), forest, charcoal.
+// Cycles automatically, so adding a project in projects.ts needs no change here.
+const palette = [
+  { bg: "var(--glow)", fg: "#07070a", sub: "rgba(7,7,10,0.62)" },
+  { bg: "#f4f5ef", fg: "#101012", sub: "rgba(16,16,18,0.58)" },
+  { bg: "#cfe9e2", fg: "#0c1f1a", sub: "rgba(12,31,26,0.62)" },
+  { bg: "#14361f", fg: "var(--glow)", sub: "rgba(244,245,239,0.68)" },
+  { bg: "#17171d", fg: "#f4f5ef", sub: "rgba(244,245,239,0.6)" },
+];
+
+const condensed = '"Anton", "Bebas Neue", Impact, "Arial Narrow", sans-serif';
+
 export function ProjectIndex({ projects }: Props) {
-  const [hovered, setHovered] = useState<Project | null>(null);
-  const [enabled, setEnabled] = useState(false);
-  const mx = useMotionValue(0);
-  const my = useMotionValue(0);
-  const sx = useSpring(mx, { stiffness: 220, damping: 26, mass: 0.6 });
-  const sy = useSpring(my, { stiffness: 220, damping: 26, mass: 0.6 });
-  const raf = useRef(0);
-
-  useEffect(() => {
-    const check = () => {
-      const isTouch =
-        window.matchMedia("(hover: none)").matches ||
-        window.matchMedia("(pointer: coarse)").matches;
-      setEnabled(!isTouch && window.innerWidth >= 768);
-    };
-    check();
-    window.addEventListener("resize", check);
-    return () => window.removeEventListener("resize", check);
-  }, []);
-
-  useEffect(() => {
-    if (!enabled) return;
-    const onMove = (e: MouseEvent) => {
-      cancelAnimationFrame(raf.current);
-      raf.current = requestAnimationFrame(() => {
-        mx.set(e.clientX + 28);
-        my.set(e.clientY - 200);
-      });
-    };
-    window.addEventListener("mousemove", onMove);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(raf.current);
-    };
-  }, [enabled, mx, my]);
-
   return (
-    <div className="relative">
-      <ul className="border-t border-white/10">
-        {projects.map((p, i) => (
-          <li
+    <ul className="flex flex-col gap-2 sm:gap-3">
+      {projects.map((p, i) => {
+        const c = palette[i % palette.length];
+        return (
+          <motion.li
             key={p.slug}
-            onMouseEnter={() => setHovered(p)}
-            onMouseLeave={() =>
-              setHovered((h) => (h?.slug === p.slug ? null : h))
-            }
-            className="group border-b border-white/10"
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, delay: i * 0.05 }}
           >
-            <motion.div
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
-              transition={{ duration: 0.55, delay: i * 0.05 }}
+            <Link
+              to="/projects/$slug"
+              params={{ slug: p.slug }}
+              data-cursor="link"
+              style={{ backgroundColor: c.bg, color: c.fg }}
+              className="group block overflow-hidden rounded-xl px-5 py-6 outline-none ring-1 ring-white/10 transition-transform duration-500 ease-out hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:ring-2 focus-visible:ring-white sm:px-8 sm:py-8"
             >
-              <Link
-                to="/projects/$slug"
-                params={{ slug: p.slug }}
-                data-cursor="link"
-                className="grid grid-cols-[auto_1fr_auto] items-baseline gap-4 py-8 transition-all duration-500 hover:pl-4 sm:py-10 md:py-12"
-                style={{
-                  opacity:
-                    hovered && hovered.slug !== p.slug && enabled ? 0.28 : 1,
-                }}
-              >
-                <span className="w-10 text-xs uppercase tracking-[0.24em] text-muted-foreground">
-                  {p.index}
-                </span>
-
-                <span className="min-w-0">
-                  <span className="block truncate font-display text-4xl font-light leading-[0.95] tracking-tight transition-colors group-hover:text-[var(--glow)] sm:text-6xl md:text-7xl lg:text-8xl">
-                    {p.title}
+              {/* Always-visible row */}
+              <div className="flex items-start justify-between gap-6">
+                <div className="flex min-w-0 items-start gap-4 sm:gap-6">
+                  <span
+                    className="pt-2 text-xs uppercase tracking-[0.24em]"
+                    style={{ color: c.sub }}
+                  >
+                    {p.index}
                   </span>
-                  {!enabled && (
+                  <h2
+                    style={{ fontFamily: condensed }}
+                    className="break-words text-[clamp(2.5rem,7.5vw,6.5rem)] font-normal uppercase leading-[0.92] tracking-[-0.005em]"
+                  >
+                    {p.title}
+                  </h2>
+                </div>
+
+                <div
+                  className="hidden shrink-0 items-start gap-6 pt-2 text-right text-xs uppercase tracking-[0.22em] sm:flex"
+                  style={{ color: c.sub }}
+                >
+                  <div className="flex flex-col gap-1">
+                    <span>{p.tag}</span>
+                    <span>{p.year}</span>
+                  </div>
+                  <span
+                    aria-hidden
+                    className="text-base transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                    style={{ color: c.fg }}
+                  >
+                    ↗
+                  </span>
+                </div>
+              </div>
+
+              {/* Opens on hover / keyboard focus; always open on touch screens */}
+              <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] [@media(hover:none)]:grid-rows-[1fr]">
+                <div className="min-h-0 overflow-hidden">
+                  <div className="grid gap-6 pt-6 md:grid-cols-[1fr_auto] md:items-end">
+                    <div className="max-w-xl">
+                      <p
+                        className="mb-3 text-xs uppercase tracking-[0.22em] sm:hidden"
+                        style={{ color: c.sub }}
+                      >
+                        {p.tag} · {p.year}
+                      </p>
+                      <p className="font-serif text-xl italic leading-snug sm:text-2xl">
+                        {p.blurb}
+                      </p>
+                      <span
+                        className="mt-5 inline-block border-b pb-0.5 text-xs uppercase tracking-[0.22em]"
+                        style={{ borderColor: c.fg }}
+                      >
+                        View project ↗
+                      </span>
+                    </div>
+
                     <img
                       src={p.image}
                       alt=""
                       loading="lazy"
                       width={1200}
                       height={900}
-                      className="mt-5 aspect-[4/3] w-full max-w-sm rounded-md object-cover md:hidden"
+                      className="aspect-[4/3] w-full rounded-lg object-cover md:w-72"
                     />
-                  )}
-                </span>
-
-                <span className="flex shrink-0 items-baseline gap-4 text-xs uppercase tracking-[0.22em] text-muted-foreground sm:gap-8">
-                  <span className="hidden sm:inline text-ink/70">{p.tag}</span>
-                  <span>{p.year}</span>
-                  <span
-                    aria-hidden
-                    className="text-[var(--glow)] transition-transform group-hover:translate-x-1"
-                  >
-                    ↗
-                  </span>
-                </span>
-              </Link>
-            </motion.div>
-          </li>
-        ))}
-      </ul>
-
-      {enabled && (
-        <motion.div
-          aria-hidden
-          style={{ x: sx, y: sy }}
-          className="pointer-events-none fixed left-0 top-0 z-40 hidden md:block"
-        >
-          <AnimatePresence mode="wait">
-            {hovered && (
-              <motion.div
-                key={hovered.slug}
-                initial={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                animate={{ opacity: 1, scale: 1, rotate: -2 }}
-                exit={{ opacity: 0, scale: 0.9, rotate: -3 }}
-                transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                className="relative"
-              >
-                <img
-                  src={hovered.image}
-                  alt=""
-                  width={1200}
-                  height={900}
-                  className="h-[320px] w-[440px] rounded-lg object-cover shadow-[0_40px_100px_-30px_rgba(0,0,0,0.9)] ring-1 ring-white/10"
-                />
-                <div className="absolute inset-x-3 -bottom-3 flex items-center justify-between rounded-md glass px-3 py-1.5 text-[10px] uppercase tracking-[0.22em]">
-                  <span className="text-[var(--glow)]">{hovered.tag}</span>
-                  <span className="text-ink/70">{hovered.year}</span>
+                  </div>
                 </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </motion.div>
-      )}
-    </div>
+              </div>
+            </Link>
+          </motion.li>
+        );
+      })}
+    </ul>
   );
 }
