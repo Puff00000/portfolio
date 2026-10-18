@@ -25,13 +25,13 @@ export const projects: Project[] = [
     blurb: "An end-to-end web application — from product framing to shipped UI.",
   },
   {
-    slug: "zomato-case-study",
+    slug: "transaction-dq-fraud-monitor",
     index: "02",
-    title: "Zomato Case Study",
-    tag: "Case study",
-    year: "2025",
+    title: "Fraud Risk Monitor",
+    tag: "Data Pipeline",
+    year: "2026",
     image: zomato,
-    blurb: "A product deep-dive into Zomato — problem framing, flows, and recommendations.",
+    blurb: "Fraud scores are meaningless on broken data, so I built a pipeline that checks data quality first and only then scores risk.",
   },
   {
     slug: "theiceapple",
