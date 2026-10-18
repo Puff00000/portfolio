@@ -3,9 +3,6 @@ import zomato from "@/assets/projects/zomato.jpg";
 import iceapple from "@/assets/projects/iceapple.jpg";
 import validator from "@/assets/projects/validator.jpg";
 import snuggle from "@/assets/projects/snuggle.jpg";
-// Add this image to src/assets/projects/ BEFORE using this file,
-// otherwise the build fails on a missing import.
-import igTeardown from "@/assets/projects/ig-dm-teardown.jpg";
 
 export type Project = {
   slug: string;
@@ -15,9 +12,6 @@ export type Project = {
   year: string;
   image: string;
   blurb: string;
-  // Optional. If set, the block opens this link in a new tab
-  // instead of the project's own page (e.g. a PDF in /public, a repo, a live site).
-  href?: string;
 };
 
 export const projects: Project[] = [
@@ -31,13 +25,13 @@ export const projects: Project[] = [
     blurb: "An end-to-end web application — from product framing to shipped UI.",
   },
   {
-    slug: "zomato-case-study",
+    slug: "transaction-dq-fraud-monitor",
     index: "02",
-    title: "Zomato Case Study",
-    tag: "Case study",
-    year: "2025",
+    title: "Fraud Risk Monitor",
+    tag: "Data Pipeline",
+    year: "2026",
     image: zomato,
-    blurb: "A product deep-dive into Zomato — problem framing, flows, and recommendations.",
+    blurb: "Fraud scores are meaningless on broken data, so I built a pipeline that checks data quality first and only then scores risk.",
   },
   {
     slug: "theiceapple",
@@ -65,17 +59,6 @@ export const projects: Project[] = [
     year: "2024",
     image: snuggle,
     blurb: "A soft, companion-first product concept — warm UI and gentle interactions.",
-  },
-  {
-    slug: "instagram-dm-search-teardown",
-    index: "06",
-    title: "Instagram DM Search",
-    tag: "Teardown",
-    year: "2026",
-    image: igTeardown,
-    blurb:
-      "Instagram's DM search locks you into a slice of the chat. I traced why, who it hurts, and how I'd fix it.",
-    href: "/teardowns/instagram-dm-search-teardown.pdf",
   },
 ];
 
