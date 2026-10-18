@@ -36,7 +36,7 @@ export const projects: Project[] = [
   {
     slug: "theiceapple",
     index: "03",
-    title: "TheIceApple",
+    title: "SpoonSixty",
     tag: "Concept",
     year: "2024",
     image: iceapple,
@@ -52,13 +52,13 @@ export const projects: Project[] = [
     blurb: "An AI tool for validating early-stage startup ideas in the Indian market.",
   },
   {
-    slug: "snuggle",
+    slug: "instagram-dm-search-teardown",
     index: "05",
-    title: "Snuggle",
-    tag: "Product",
-    year: "2024",
+    title: "Instagram DM Search",
+    tag: "Product Teardown",
+    year: "2025",
     image: snuggle,
-    blurb: "A soft, companion-first product concept — warm UI and gentle interactions.",
+    blurb: "Instagram's DM search locks you into a slice of the chat. I traced why, who it hurts, and how I'd fix it.",
   },
 ];
 
