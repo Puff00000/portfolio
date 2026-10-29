@@ -59,6 +59,7 @@ export const projects: Project[] = [
     year: "2025",
     image: snuggle,
     blurb: "Instagram's DM search locks you into a slice of the chat. I traced why, who it hurts, and how I'd fix it.",
+    href: "https://docs.google.com/document/d/1GNST62V9WWO4Q1rpA0v3L9KcTfLvTUPU/edit?usp=sharing&ouid=111295531481954010613&rtpof=true&sd=true",
   },
 ];
 
