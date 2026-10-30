@@ -112,7 +112,7 @@ export const caseStudies: Record<string, CaseStudy> = {
     links: [
       // Paste your Google Drive share link between the quotes
       // (Share -> Anyone with the link -> Viewer -> Copy link)
-      { label: "Read the full teardown (PDF)", url: "PASTE_YOUR_DRIVE_LINK_HERE" },
+      { label: "Read the full teardown (PDF)", url: "https://docs.google.com/document/d/1GNST62V9WWO4Q1rpA0v3L9KcTfLvTUPU/edit?usp=sharing&ouid=111295531481954010613&rtpof=true&sd=true" },
     ],
     sections: [
       {
