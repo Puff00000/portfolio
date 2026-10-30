@@ -7,6 +7,7 @@ import lkkHome from "@/assets/projects/lkk/lkk-home.png";
 import lkkBrowse from "@/assets/projects/lkk/lkk-browse.png";
 import lkkListing from "@/assets/projects/lkk/lkk-listing.png";
 import lkkPricing from "@/assets/projects/lkk/lkk-pricing.png";
+import igCover from "@/assets/projects/ig-dm-teardown.jpg";
 
 export type SampleLocal = {
   category: string;
@@ -101,6 +102,82 @@ export const caseStudies: Record<string, CaseStudy> = {
           "Guides manage their own services, bank and UPI details are checked with a penny-drop verification, intro videos go through admin moderation, and payouts run through an admin queue.",
           "Trips can be created before signing up: the flow keeps its state in the browser first, so there is no signup wall before a traveller sees the product.",
           "Along the way I moved phone login off Firebase OTP and rebuilt the email templates as a branded system. Early versions ran on Node, Express and Prisma before moving to FastAPI.",
+        ],
+      },
+    ],
+  },
+  "instagram-dm-search-teardown": {
+    intro:
+      "A teardown of why Instagram's DM search drops you into a locked slice of the conversation: who it hurts, the likely causes, and a three-step fix.",
+    links: [
+      // Paste your Google Drive share link between the quotes
+      // (Share -> Anyone with the link -> Viewer -> Copy link)
+      { label: "Read the full teardown (PDF)", url: "PASTE_YOUR_DRIVE_LINK_HERE" },
+    ],
+    sections: [
+      {
+        label: "01 — The bug",
+        heading: "Search finds the message, then locks you in.",
+        body: [
+          "When you search the Instagram DM inbox and tap a result, the right message appears. But once you're inside, you can't scroll up or down past that slice of the chat. The rest of the conversation is out of reach from that entry point.",
+          "WhatsApp does the opposite: it opens the full chat, highlights the match, and lets you scroll freely in both directions. The only way out on Instagram is to leave, open the chat the long way, and scroll from the top.",
+        ],
+        image: igCover,
+        imageAlt: "Illustration of a chat where only the slice around the search result is reachable",
+        caption: "The reachable slice versus the whole conversation (illustration).",
+      },
+      {
+        label: "02 — Who it hurts",
+        heading: "Hardest on people who live in their DMs.",
+        body: [
+          "Power users with dozens of conversations lean on search the most, so for them it's critical. Creators and small business owners come next: they dig up old brand deals, collaboration context and customer history, and the messages around a result often matter more than the result itself.",
+          "Casual users and new users barely notice, since their histories are short and they rarely search.",
+          "These severity levels are my judgement, not measured data.",
+        ],
+      },
+      {
+        label: "03 — Why it might happen",
+        heading: "Three hypotheses, one most likely.",
+        body: [
+          "A. A lazy-loading bug (most likely): the chat anchors to the batch of messages that matched, but scrolling never triggers loading the neighbouring batches.",
+          "B. A preview context: search results may open a lightweight, deliberately limited view that was never meant for scrolling, and nobody flagged it as a problem.",
+          "C. A scroll listener that isn't wired up: the scroll input on the search-entry view may not reach the full chat's scroll container.",
+          "I can't see Instagram's code, so these are hypotheses based on the behaviour I observed.",
+        ],
+      },
+      {
+        label: "04 — The benchmark",
+        heading: "WhatsApp and Telegram already get this right.",
+        body: [
+          "Both open the full chat, highlight the match, let you scroll in either direction, step between multiple results with arrows, and support searching inside a single chat.",
+          "Instagram does none of these properly: scrolling is blocked, the highlight is partial, and there is no multi-result navigation or in-chat search. The gap goes beyond one bug: several adjacent features are missing.",
+          "Compared on the apps as I tested them. Features change, so recheck against current versions.",
+        ],
+      },
+      {
+        label: "05 — Three fixes",
+        heading: "A quick fix, a proper fix, and a north star.",
+        body: [
+          "1. Fix the scroll anchor so adjacent message batches load. About 1–2 sprints, low risk, immediate relief, but no new features.",
+          "2. Open search results in the full chat: scroll to the match, highlight it, allow free navigation. About 2–4 sprints, medium risk because it touches chat routing and state, and it may load more history on entry.",
+          "3. Add in-chat search with up and down arrows between matches. A quarter or more of work, and it needs per-conversation indexing.",
+          "My sequence: ship the first as a hotfix, plan the second for the next cycle, and put the third on the six-month roadmap. The effort figures are rough estimates.",
+        ],
+      },
+      {
+        label: "06 — Success metrics",
+        heading: "How I'd know it worked.",
+        body: [
+          "Primary: the share of search sessions where the user scrolls after tapping a result (goal: above 60%), the search abandonment rate (goal: below 20%), and repeat search queries as a sign of frustration (goal: down by 30%).",
+          "Guardrails: DM session length should rise, DM search usage should recover as trust returns, store-review sentiment about DMs should improve, and chat load time and message delivery must not regress.",
+          "These are targets I'd set before shipping, not baselines taken from Instagram's data.",
+        ],
+      },
+      {
+        label: "07 — Why now",
+        heading: "A small bug on a high-traffic path.",
+        body: [
+          "It breaks a core navigation behaviour for the heaviest users, sits on a path used constantly, and cuts against Meta's push to make DMs a business channel. WhatsApp already does it correctly, and the first fix is cheap. That makes it a clear P1.",
         ],
       },
     ],
