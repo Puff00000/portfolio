@@ -1,93 +1,145 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
-import { ProjectIndex } from "@/components/project-index";
-import { projects } from "@/lib/projects";
+import type { Project } from "@/lib/projects";
 
-export const Route = createFileRoute("/projects/")({
-  head: () => ({
-    meta: [
-      { title: "Work — Samriddhi ✲ 2026" },
-      {
-        name: "description",
-        content:
-          "Selected work by Samriddhi — web apps, case studies, AI tools, and product concepts.",
-      },
-      { property: "og:title", content: "Work — Samriddhi ✲ 2026" },
-      {
-        property: "og:description",
-        content:
-          "Selected work by Samriddhi — web apps, case studies, AI tools, and product concepts.",
-      },
-    ],
-    // Condensed display face used for the project block titles
-    links: [
-      { rel: "preconnect", href: "https://fonts.googleapis.com" },
-      {
-        rel: "preconnect",
-        href: "https://fonts.gstatic.com",
-        crossOrigin: "anonymous",
-      },
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Anton&display=swap",
-      },
-    ],
-  }),
-  component: ProjectsPage,
-});
+type Props = { projects: Project[] };
 
-function ProjectsPage() {
+// Block colours, built from the portfolio theme:
+// lime glow, cream (menu card), mint (menu card gradient), forest, charcoal.
+// Cycles automatically, so adding a project in projects.ts needs no change here.
+const palette = [
+  { bg: "var(--glow)", fg: "#07070a", sub: "rgba(7,7,10,0.62)" },
+  { bg: "#f4f5ef", fg: "#101012", sub: "rgba(16,16,18,0.58)" },
+  { bg: "#cfe9e2", fg: "#0c1f1a", sub: "rgba(12,31,26,0.62)" },
+  { bg: "#14361f", fg: "var(--glow)", sub: "rgba(244,245,239,0.68)" },
+  { bg: "#17171d", fg: "#f4f5ef", sub: "rgba(244,245,239,0.6)" },
+];
+
+const condensed = '"Anton", "Bebas Neue", Impact, "Arial Narrow", sans-serif';
+
+const blockClass =
+  "group block overflow-hidden rounded-xl px-5 py-6 outline-none ring-1 ring-white/10 transition-transform duration-500 ease-out hover:-translate-y-1 focus-visible:-translate-y-1 focus-visible:ring-2 focus-visible:ring-white sm:px-8 sm:py-8";
+
+export function ProjectIndex({ projects }: Props) {
   return (
-    <main className="relative px-6 pt-28 pb-16 sm:px-10 md:px-16">
-      <div className="mx-auto max-w-6xl">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center justify-between text-xs uppercase tracking-[0.24em] text-muted-foreground"
-        >
-          <Link to="/" className="hover:text-[var(--glow)]">
-            ← Intro
-          </Link>
-          <span>Selected work ✲ 2026</span>
-        </motion.div>
+    <ul className="flex flex-col gap-2 sm:gap-3">
+      {projects.map((p, i) => {
+        const c = palette[i % palette.length];
+        const style = { backgroundColor: c.bg, color: c.fg };
+        const cta =
+          p.href?.toLowerCase().endsWith(".pdf") ||
+          p.href?.includes("drive.google.com")
+            ? "Open PDF ↗"
+            : "View project ↗";
 
-        <div className="mt-14 flex items-baseline justify-between sm:mt-20">
-          <motion.p
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-xs uppercase tracking-[0.28em] text-muted-foreground"
+        const content = (
+          <>
+            {/* Always-visible row */}
+            <div className="flex items-start justify-between gap-6">
+              <div className="flex min-w-0 items-start gap-4 sm:gap-6">
+                <span
+                  className="pt-2 text-xs uppercase tracking-[0.24em]"
+                  style={{ color: c.sub }}
+                >
+                  {p.index}
+                </span>
+                <h2
+                  style={{ fontFamily: condensed }}
+                  className="break-words text-[clamp(2.5rem,7.5vw,6.5rem)] font-normal uppercase leading-[0.92] tracking-[-0.005em]"
+                >
+                  {p.title}
+                </h2>
+              </div>
+
+              <div
+                className="hidden shrink-0 items-start gap-6 pt-2 text-right text-xs uppercase tracking-[0.22em] sm:flex"
+                style={{ color: c.sub }}
+              >
+                <div className="flex flex-col gap-1">
+                  <span>{p.tag}</span>
+                  <span>{p.year}</span>
+                </div>
+                <span
+                  aria-hidden
+                  className="text-base transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1"
+                  style={{ color: c.fg }}
+                >
+                  ↗
+                </span>
+              </div>
+            </div>
+
+            {/* Opens on hover / keyboard focus; always open on touch screens */}
+            <div className="grid grid-rows-[0fr] transition-[grid-template-rows] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:grid-rows-[1fr] group-focus-visible:grid-rows-[1fr] [@media(hover:none)]:grid-rows-[1fr]">
+              <div className="min-h-0 overflow-hidden">
+                <div className="grid gap-6 pt-6 md:grid-cols-[1fr_auto] md:items-end">
+                  <div className="max-w-xl">
+                    <p
+                      className="mb-3 text-xs uppercase tracking-[0.22em] sm:hidden"
+                      style={{ color: c.sub }}
+                    >
+                      {p.tag} · {p.year}
+                    </p>
+                    <p className="font-serif text-xl italic leading-snug sm:text-2xl">
+                      {p.blurb}
+                    </p>
+                    <span
+                      className="mt-5 inline-block border-b pb-0.5 text-xs uppercase tracking-[0.22em]"
+                      style={{ borderColor: c.fg }}
+                    >
+                      {cta}
+                    </span>
+                  </div>
+
+                  <img
+                    src={p.image}
+                    alt=""
+                    loading="lazy"
+                    width={1200}
+                    height={900}
+                    className="aspect-[4/3] w-full rounded-lg object-cover md:w-72"
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        );
+
+        return (
+          <motion.li
+            key={p.slug}
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-60px" }}
+            transition={{ duration: 0.55, delay: i * 0.05 }}
           >
-            Index / {String(projects.length).padStart(2, "0")}
-          </motion.p>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="hidden font-serif italic text-ink/60 sm:block"
-          >
-            hover a block to open it
-          </motion.p>
-        </div>
-
-        <motion.h1
-          initial={{ opacity: 0, y: 24 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-6 font-display text-[clamp(3rem,10vw,8rem)] font-light leading-[0.88] tracking-[-0.03em]"
-        >
-          The <em className="font-serif italic text-[var(--glow)]">work.</em>
-        </motion.h1>
-
-        <p className="mt-6 max-w-2xl text-ink/70 sm:text-lg">
-          Case studies, tools, and small experiments. Each block is a project.
-        </p>
-
-        <section className="mt-12 sm:mt-16">
-          <ProjectIndex projects={projects} />
-        </section>
-      </div>
-    </main>
+            {p.href ? (
+              // External file/link: plain anchor, opens in a new tab
+              <a
+                href={p.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                data-cursor="link"
+                style={style}
+                className={blockClass}
+              >
+                {content}
+              </a>
+            ) : (
+              // Internal project page
+              <Link
+                to="/projects/$slug"
+                params={{ slug: p.slug }}
+                data-cursor="link"
+                style={style}
+                className={blockClass}
+              >
+                {content}
+              </Link>
+            )}
+          </motion.li>
+        );
+      })}
+    </ul>
   );
 }
