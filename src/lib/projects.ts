@@ -2,7 +2,7 @@ import lkk from "@/assets/projects/lkk.jpg";
 import zomato from "@/assets/projects/zomato.jpg";
 import iceapple from "@/assets/projects/iceapple.jpg";
 import validator from "@/assets/projects/validator.jpg";
-import snuggle from "@/assets/projects/snuggle.jpg";
+import igTeardown from "@/assets/projects/ig-dm-teardown.jpg";
 
 export type Project = {
   slug: string;
@@ -37,7 +37,7 @@ export const projects: Project[] = [
     blurb: "Fraud scores are meaningless on broken data, so I built a pipeline that checks data quality first and only then scores risk.",
   },
   {
-    slug: "spoonsixty",
+    slug: "theiceapple",
     index: "03",
     title: "SpoonSixty",
     tag: "Concept",
@@ -60,11 +60,8 @@ export const projects: Project[] = [
     title: "Instagram DM Search",
     tag: "Product Teardown",
     year: "2025",
-    image: snuggle,
+    image: igTeardown,
     blurb: "Instagram's DM search locks you into a slice of the chat. I traced why, who it hurts, and how I'd fix it.",
-    // Paste your Google Drive share link between the quotes
-    // (Share -> Anyone with the link -> Viewer -> Copy link)
-    href: "https://docs.google.com/document/d/1GNST62V9WWO4Q1rpA0v3L9KcTfLvTUPU/edit?usp=sharing&ouid=111295531481954010613&rtpof=true&sd=true",
   },
 ];
 
