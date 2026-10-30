@@ -12,6 +12,8 @@ export type Project = {
   year: string;
   image: string;
   blurb: string;
+  // Optional. If set, the block opens this link in a new tab instead of
+  // the project's own page (a PDF, a Drive file, a repo, a live site).
   href?: string;
 };
 
@@ -35,7 +37,7 @@ export const projects: Project[] = [
     blurb: "Fraud scores are meaningless on broken data, so I built a pipeline that checks data quality first and only then scores risk.",
   },
   {
-    slug: "theiceapple",
+    slug: "spoonsixty",
     index: "03",
     title: "SpoonSixty",
     tag: "Concept",
@@ -60,6 +62,8 @@ export const projects: Project[] = [
     year: "2025",
     image: snuggle,
     blurb: "Instagram's DM search locks you into a slice of the chat. I traced why, who it hurts, and how I'd fix it.",
+    // Paste your Google Drive share link between the quotes
+    // (Share -> Anyone with the link -> Viewer -> Copy link)
     href: "https://docs.google.com/document/d/1GNST62V9WWO4Q1rpA0v3L9KcTfLvTUPU/edit?usp=sharing&ouid=111295531481954010613&rtpof=true&sd=true",
   },
 ];
