@@ -12,6 +12,7 @@ export type Project = {
   year: string;
   image: string;
   blurb: string;
+  href?: string;
 };
 
 export const projects: Project[] = [
